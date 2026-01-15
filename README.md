@@ -89,9 +89,9 @@ MySQL schema and initial scripts.
 
 ## Documentation:
 
-- [PRD](https://github.com/richglez/terapia-respiro-emocional-app/tree/main/docs/PRD.md) - Product Requirements Document
+- [PRD](docs/PRD.md) - Product Requirements Document
 
-- [Modelo de datos - Schema de base de datos]()
+- [Modelo de datos - Schema de base de datos](docs/SchemaDB.md)
 
 
 ## Overview:
