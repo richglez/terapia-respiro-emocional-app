@@ -32,6 +32,15 @@ The user can:
 - Manage patient records in an organized and efficient way
 
 
+
+## 🛠 Technologies Used
+- Frontend: Angular
+- Backend: Node.js, Express
+- Database: MySQL
+- API: RESTful API
+- Architecture: Client–Server
+
+
 ## 📂 Project Structure
 
 ### Backend
