@@ -106,8 +106,8 @@ MySQL schema and initial scripts.
 ## Documentation:
 
 - [PRD](docs/PRD.md) - Product Requirements Document
-- [Modelo de datos - Schema de base de datos](docs/SchemaDB.md)
-- [Pages]()
+- [Modelo de datos](docs/SchemaDB.md) - Schema de base de datos
+- [Pages](docs/PAGES.md) - Listado de rutas y endpoints
 
 
 
