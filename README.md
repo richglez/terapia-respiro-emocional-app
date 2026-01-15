@@ -43,7 +43,7 @@ Angular application that consumes the REST API.
 ### Database
 MySQL schema and initial scripts.
 
-
+```bash
 📦 terapia-respiro-emocional
 ├── 📁 backend
 │   ├── 📁 controllers
