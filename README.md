@@ -1,5 +1,5 @@
 # Terapia Respiro Emocional – CRUD APP
-This is my first Full Stack CRUD project using Angular for the frontend, Node.js and Express for the backend, and MySQL as the relational database. It implements CRUD operations through a REST API, following best development practices.
+This is my first modern Full Stack CRUD project using Angular for the frontend, Node.js and Express for the backend, and MySQL as the relational database. It implements CRUD operations through a REST API, following best development practices.
 
 # 🚀 Features / Funcionalidades
 This application allows users to manage patients and organizational information efficiently.
