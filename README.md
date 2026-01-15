@@ -87,6 +87,10 @@ MySQL schema and initial scripts.
 | npm init  | Initialize the project within the editor |
 
 
-## Documentation
+## Documentation:
 
 - [PRD](https://github.com/richglez/terapia-respiro-emocional-app/tree/main/docs/PRD.md) - Product Requirements Document
+
+
+## Overview:
+![Dashboard](docs/images/TREdashboard.png)
