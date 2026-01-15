@@ -87,13 +87,6 @@ MySQL schema and initial scripts.
 | npm init  | Initialize the project within the editor |
 
 
-## Documentation:
-
-- [PRD](docs/PRD.md) - Product Requirements Document
-
-- [Modelo de datos - Schema de base de datos](docs/SchemaDB.md)
-
-
 ## Overview:
 **Dashboard**
 ![Dashboard](docs/images/TREdashboard.png)
@@ -106,5 +99,16 @@ MySQL schema and initial scripts.
 
 **Calendar new Substitute**
 ![CalendarSubstitute](docs/images/TREsubstitute.png)
+
+
+
+
+## Documentation:
+
+- [PRD](docs/PRD.md) - Product Requirements Document
+- [Modelo de datos - Schema de base de datos](docs/SchemaDB.md)
+- [Pages]()
+
+
 
 
