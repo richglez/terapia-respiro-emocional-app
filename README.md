@@ -11,7 +11,7 @@ This application allows users to manage patients and organizational information 
   - View patient information
   - Update patient data
   - Delete patients from the database
- 
+
 - Dashboard / Overview
   - Initial dashboard view with relevant organizational activity
   - Quick access to important information and events related to the organization
@@ -79,7 +79,7 @@ MySQL schema and initial scripts.
 
 
 ```
-## 🛠 Scripts 
+## 🛠 Scripts
 
 | Script | Description  |
 |-----------|-------------|
@@ -89,4 +89,4 @@ MySQL schema and initial scripts.
 
 ## Documentation
 
--  Product Requirements Document
+- "https://github.com/richglez/terapia-respiro-emocional-app/tree/main/docs/PRD.md"  Product Requirements Document
