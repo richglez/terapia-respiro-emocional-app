@@ -1,0 +1,80 @@
+<h1>Registro de cuidadores</h1>
+<div class="form-container">
+  <form #cuidadoresForm="ngForm" (ngSubmit)="addCuidador(cuidadoresForm)">
+    <div class="form-section">
+      <h2>Informacion personal del cuidador</h2>
+      <label for="txtNombre">Nombre:</label>
+      <input
+        type="text"
+        name="nombreCuidador"
+        id="txtNombre"
+        placeholder="Ingrese el Nombre"
+        [(ngModel)]="cuidadoresService.selectedCuidador.nombreCuidador"
+        required
+      />
+
+      <label for="txtApellidoPaterno">Apellido Paterno:</label>
+      <input
+        type="text"
+        name="apPatCuidador"
+        id="txtApellidoPaterno"
+        placeholder="Ingrese el Apellido paterno"
+        [(ngModel)]="cuidadoresService.selectedCuidador.apPatCuidador"
+        required
+      />
+
+      <label for="txtApellidoMaterno">Apellido Materno:</label>
+      <input
+        type="text"
+        name="apMatCuidador"
+        id="txtApellidoMaterno"
+        placeholder="Ingrese el Apellido materno"
+        [(ngModel)]="cuidadoresService.selectedCuidador.apMatCuidador"
+        required
+      />
+
+      <label for="txtSexo">Sexo:</label>
+      <select
+        name="sexoCuidador"
+        id="txtSexo"
+        required
+        [(ngModel)]="cuidadoresService.selectedCuidador.sexoCuidador"
+      >
+        <option value="M">M</option>
+        <option value="F">F</option>
+      </select>
+
+      <label for="txtEdad">Edad:</label>
+      <input
+        type="text"
+        name="edadCuidador"
+        id="txtEdad"
+        placeholder="Ingrese la edad"
+        [(ngModel)]="cuidadoresService.selectedCuidador.edadCuidador"
+        required
+      />
+
+      <label for="txtTelefono">Telefono:</label>
+      <input
+        type="text"
+        name="telefonoCuidador"
+        id="txtTelefono"
+        placeholder="Ingrese el telefono del cuidador:"
+        [(ngModel)]="cuidadoresService.selectedCuidador.telefonoCuidador"
+        required
+      />
+
+      <label for="txtnum_suplencias">Numero de suplencias</label>
+      <input
+        type="text"
+        readonly
+        name="num_suplencias"
+        [value]="numeroDeSuplenciasTxt"
+        [(ngModel)]="cuidadoresService.selectedCuidador.num_suplencias"
+      />
+      <!--Aqui poner nadamas 0 y ahi que se vaya sumando con las suplencias agreagddas en el calendario-->
+    </div>
+
+    <input type="submit" value="Registrar" id="btnRegistrar" />
+  </form>
+</div>

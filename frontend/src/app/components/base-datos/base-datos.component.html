@@ -1,0 +1,446 @@
+<nav class="navbar">
+  <h1>Base de Datos</h1>
+  <div class="search-container">
+    <div class="form-group">
+      <label for="search-input">¿Qué estás buscando?</label>
+      <input
+        type="text"
+        placeholder="Buscar por nombres apellidos, alc/mun, programa, sexo, estado"
+        [(ngModel)]="searchText"
+        (ngModelChange)="onSearchChange()"
+        id="searchText"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="category-select">Categoría:</label>
+      <select
+        id="category-select"
+        [(ngModel)]="selectedCategory"
+        (change)="loadCategoryData()"
+      >
+        <option value="pacientes">Pacientes</option>
+        <option value="cuidadores">Cuidadores</option>
+        <option value="suplencias">Suplencias</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="sexo-select">Sexo:</label>
+      <select
+        id="sexo-select"
+        [(ngModel)]="selectedSexo"
+        (change)="onSexoChange()"
+      >
+        <option value="">Todos</option>
+        <!-- Añade opción para mostrar todos los sexos -->
+        <option value="M">M</option>
+        <option value="F">F</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="edad-select">Edad:</label>
+      <select
+        id="edad-select"
+        [(ngModel)]="selectedEdad"
+        (change)="onEdadChange()"
+      >
+        <option value="">Todos</option>
+        <option value="nino">Niños</option>
+        <option value="adulto">Adultos</option>
+      </select>
+    </div>
+    
+    <div class="botondiv">
+      <button id="btnSearch" (click)="search()">Buscar</button>
+    </div>
+    <div class="botondiv">
+      <button id="btnExport" (click)="exportExcel()">Exportar</button>
+      <!--Boton para permitir descargar a formato excel la base de datos-->
+    </div>
+  </div>
+</nav>
+
+<div *ngIf="selectedCategory === 'pacientes'" class="table-container">
+  <div class="table-wrapper">
+    <table class="styled-table" id="BaseDatosPacientes">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Expediente</th>
+          <th>Apellido Paterno</th>
+          <th>Apellido Materno</th>
+          <th>Nombre</th>
+          <th>Ingreso Programa Suplencia</th>
+          <th>Domicilio</th>
+          <th>Colonia</th>
+          <th>Alcaldia/Municipio</th>
+          <th>Entidad Federativa</th>
+          <th>Sexo</th>
+          <th>Edad</th>
+          <th>Diagnostico</th>
+          <th>Nacionalidad</th>
+          <th>Cuidador Primario</th>
+          <th>Parentesco</th>
+          <th>Tipo de programa</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let paciente of filteredPacientes; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>
+            <span *ngIf="!editField[i]?.['expediente_paciente']">{{paciente.expediente_paciente}}</span
+            ><input *ngIf="editField[i]?.['expediente_paciente']" class="edit-input" [(ngModel)]="paciente.expediente_paciente" />
+            <button class="edit-button" (click)="toggleEditPaciente(i, 'expediente_paciente')" >
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['expediente_paciente']" class="save-button" (click)="saveChangesPaciente(paciente, i)" >
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+          <td>
+            <span *ngIf="!editField[i]?.['apellido_paterno']">{{paciente.apellido_paterno}}</span>
+            <input *ngIf="editField[i]?.['apellido_paterno']" class="edit-input" [(ngModel)]="paciente.apellido_paterno"
+            />
+            <button class="edit-button" (click)="toggleEditPaciente(i, 'apellido_paterno')" >
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['apellido_paterno']" class="save-button" (click)="saveChangesPaciente(paciente, i)" >
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+          <td>
+            <span *ngIf="!editField[i]?.['apellido_materno']">{{paciente.apellido_materno}}</span>
+            <input *ngIf="editField[i]?.['apellido_materno']" class="edit-input" [(ngModel)]="paciente.apellido_materno" />
+            <button class="edit-button" (click)="toggleEditPaciente(i, 'apellido_materno')" >
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['apellido_materno']" class="save-button" (click)="saveChangesPaciente(paciente, i)" >
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+          <td>
+            <span *ngIf="!editField[i]?.['nombre_paciente']">{{paciente.nombre_paciente}}</span>
+            <input *ngIf="editField[i]?.['nombre_paciente']" class="edit-input" [(ngModel)]="paciente.nombre_paciente" />
+            <button class="edit-button" (click)="toggleEditPaciente(i, 'nombre_paciente')" >
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['nombre_paciente']" class="save-button" (click)="saveChangesPaciente(paciente, i)" >
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+          <td>
+            <span *ngIf="!editField[i]?.['ingreso_programa']">{{paciente.ingreso_programa | date : "dd/MM/yyyy"}}</span>
+            <input *ngIf="editField[i]?.['ingreso_programa']" class="edit-input" [(ngModel)]="paciente.ingreso_programa"
+            />
+            <button class="edit-button" (click)="toggleEditPaciente(i, 'ingreso_programa')" >
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['ingreso_programa']" class="save-button" (click)="saveChangesPaciente(paciente, i)" >
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+          <td>
+            <span *ngIf="!editField[i]?.['domicilio']">{{paciente.domicilio}}</span>
+            <input *ngIf="editField[i]?.['domicilio']" class="edit-input" [(ngModel)]="paciente.domicilio" />
+            <button class="edit-button" (click)="toggleEditPaciente(i, 'domicilio')">
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['domicilio']" class="save-button" (click)="saveChangesPaciente(paciente, i)">
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+          <td>
+            <span *ngIf="!editField[i]?.['colonia']">{{paciente.colonia}}</span>
+            <input *ngIf="editField[i]?.['colonia']" class="edit-input" [(ngModel)]="paciente.colonia" />
+            <button class="edit-button" (click)="toggleEditPaciente(i, 'colonia')">
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['colonia']" class="save-button" (click)="saveChangesPaciente(paciente, i)">
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+          <td>
+            <span *ngIf="!editField[i]?.['alcaldia_municipio']">{{paciente.alcaldia_municipio}}</span>
+            <input *ngIf="editField[i]?.['alcaldia_municipio']" class="edit-input" [(ngModel)]="paciente.alcaldia_municipio" />
+            <button class="edit-button" (click)="toggleEditPaciente(i, 'alcaldia_municipio')" >
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['alcaldia_municipio']" class="save-button" (click)="saveChangesPaciente(paciente, i)">
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+          <td>
+            <span *ngIf="!editField[i]?.['entidadFederativa']">{{ paciente.entidadFederativa }}</span>
+            <input *ngIf="editField[i]?.['entidadFederativa']" class="edit-input" [(ngModel)]="paciente.entidadFederativa" />
+            <button
+              class="edit-button"
+              (click)="toggleEditPaciente(i, 'entidadFederativa')"
+            >
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['entidadFederativa']" class="save-button" (click)="saveChangesPaciente(paciente, i)" >
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+          <td>
+            <span *ngIf="!editField[i]?.['sexo_paciente']">{{paciente.sexo_paciente}}</span>
+            <input *ngIf="editField[i]?.['sexo_paciente']" class="edit-input" [(ngModel)]="paciente.sexo_paciente"/>
+            <button class="edit-button" (click)="toggleEditPaciente(i, 'sexo_paciente')">
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['sexo_paciente']" class="save-button" (click)="saveChangesPaciente(paciente, i)" >
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+
+          <td>
+            <span *ngIf="!editField[i]?.['edad_paciente']">{{paciente.edad_paciente}}</span>
+            <input
+              *ngIf="editField[i]?.['edad_paciente']"
+              class="edit-input"
+              [(ngModel)]="paciente.edad_paciente"
+            />
+            <button class="edit-button" (click)="toggleEditPaciente(i, 'edad_paciente')">
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['edad_paciente']" class="save-button" (click)="saveChangesPaciente(paciente, i)" >
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+
+          <td>
+            <span *ngIf="!editField[i]?.['diagnostico']">{{paciente.diagnostico}}</span>
+            <input *ngIf="editField[i]?.['diagnostico']" class="edit-input" [(ngModel)]="paciente.diagnostico" />
+            <button class="edit-button" (click)="toggleEditPaciente(i, 'diagnostico')" >
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['diagnostico']" class="save-button" (click)="saveChangesPaciente(paciente, i)" >
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+          <td>
+            <span *ngIf="!editField[i]?.['nacionalidad']">{{paciente.nacionalidad}}</span>
+            <input
+              *ngIf="editField[i]?.['nacionalidad']"
+              class="edit-input"
+              [(ngModel)]="paciente.nacionalidad"
+            />
+            <button class="edit-button" (click)="toggleEditPaciente(i, 'nacionalidad')">
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['nacionalidad']" class="save-button" (click)="saveChangesPaciente(paciente, i)">
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+
+          <td>
+            <span *ngIf="!editField[i]?.['cuidadorNombre']">{{paciente.nombreCompletoCuidador || "No asignado"}}</span>
+            <input *ngIf="editField[i]?.['cuidadorNombre']" class="edit-input" [(ngModel)]="paciente.nombreCompletoCuidador"/>
+          </td>
+
+          <td>
+            <span *ngIf="!editField[i]?.['parentesco_con_cuidador']">{{paciente.parentesco_con_cuidador || "No asignado"}}</span>
+            <input *ngIf="editField[i]?.['parentesco_con_cuidador']" class="edit-input" [(ngModel)]="paciente.parentesco_con_cuidador"
+            />
+            <button class="edit-button" (click)="toggleEditPaciente(i, 'parentesco_con_cuidador')">
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['parentesco_con_cuidador']" class="save-button" (click)="saveChangesPaciente(paciente, i)">
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+
+          <td>
+            <span *ngIf="!editField[i]?.['tipoPrograma']">{{paciente.tipoPrograma || "No asignado"}}</span>
+            <input
+              *ngIf="editField[i]?.['tipoPrograma']"
+              class="edit-input"
+              [(ngModel)]="paciente.tipoPrograma"
+            />
+            <button class="edit-button" (click)="toggleEditPaciente(i, 'tipoPrograma')">
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['tipoPrograma']" class="save-button" (click)="saveChangesPaciente(paciente, i)">
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+
+          <td>
+            <button class="delete-button" (click)="deletePaciente(paciente.id_paciente)">
+              🗑️ Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div *ngIf="selectedCategory === 'cuidadores'" class="table-container">
+  <div class="table-wrapper">
+    <table class="styled-table" id="BaseDatosCuidadores">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Apellido Paterno</th>
+          <th>Apellido Materno</th>
+          <th>Nombre</th>
+          <th>Sexo</th>
+          <th>Edad</th>
+          <th>Telefono</th>
+          <th>Registro</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cuidador of filteredCuidadores; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>
+            <span *ngIf="!editField[i]?.['apPatCuidador']">{{cuidador.apPatCuidador}}</span>
+            <input
+              *ngIf="editField[i]?.['apPatCuidador']"
+              class="edit-input"
+              [(ngModel)]="cuidador.apPatCuidador"
+            />
+            <button class="edit-button" (click)="toggleEditPaciente(i, 'apPatCuidador')">
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['apPatCuidador']" class="save-button" (click)="saveChangesCuidador(cuidador, i)" >
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+          <td>
+            <span *ngIf="!editField[i]?.['apMatCuidador']">{{cuidador.apMatCuidador}}</span>
+            <input
+              *ngIf="editField[i]?.['apMatCuidador']"
+              class="edit-input"
+              [(ngModel)]="cuidador.apMatCuidador"
+            />
+            <button class="edit-button" (click)="toggleEditPaciente(i, 'apMatCuidador')">
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['apMatCuidador']" class="save-button" (click)="saveChangesCuidador(cuidador, i)">
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+          <td>
+            <span *ngIf="!editField[i]?.['nombreCuidador']">{{cuidador.nombreCuidador}}</span>
+            <input
+              *ngIf="editField[i]?.['nombreCuidador']"
+              class="edit-input"
+              [(ngModel)]="cuidador.nombreCuidador"
+            />
+            <button class="edit-button" (click)="toggleEditPaciente(i, 'nombreCuidador')">
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['nombreCuidador']"class="save-button" (click)="saveChangesCuidador(cuidador, i)">
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+          <td>
+            <span *ngIf="!editField[i]?.['sexoCuidador']">{{cuidador.sexoCuidador}}</span>
+            <input
+              *ngIf="editField[i]?.['sexoCuidador']"
+              class="edit-input"
+              [(ngModel)]="cuidador.sexoCuidador"
+            />
+            <button class="edit-button" (click)="toggleEditPaciente(i, 'sexoCuidador')">
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['sexoCuidador']" class="save-button" (click)="saveChangesCuidador(cuidador, i)">
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+          <td>
+            <span *ngIf="!editField[i]?.['edadCuidador']">{{cuidador.edadCuidador}}</span>
+            <input
+              *ngIf="editField[i]?.['edadCuidador']"
+              class="edit-input"
+              [(ngModel)]="cuidador.edadCuidador"
+            />
+            <button class="edit-button" (click)="toggleEditPaciente(i, 'edadCuidador')">
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['edadCuidador']" class="save-button" (click)="saveChangesCuidador(cuidador, i)">
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+          <td>
+            <span *ngIf="!editField[i]?.['telefonoCuidador']">{{cuidador.telefonoCuidador}}</span>
+            <input
+              *ngIf="editField[i]?.['telefonoCuidador']"
+              class="edit-input"
+              [(ngModel)]="cuidador.telefonoCuidador"
+            />
+            <button class="edit-button" (click)="toggleEditPaciente(i, 'telefonoCuidador')">
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['telefonoCuidador']" class="save-button" (click)="saveChangesCuidador(cuidador, i)">
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+          <td>
+            <span *ngIf="!editField[i]?.['ingreso_programa']">{{cuidador.ingreso_programa | date : "dd/MM/yyyy"}}</span>
+            <input
+              *ngIf="editField[i]?.['ingreso_programa']"
+              class="edit-input"
+              [(ngModel)]="cuidador.ingreso_programa"
+            />
+            <button class="edit-button" (click)="toggleEditPaciente(i, 'ingreso_programa')">
+              <i class="bx bxs-edit"></i>
+            </button>
+            <button *ngIf="editField[i]?.['ingreso_programa']" class="save-button" (click)="saveChangesCuidador(cuidador, i)">
+              <i class="bx bx-check"></i>
+            </button>
+          </td>
+          <td>
+            <button class="delete-button" (click)="deleteCuidador(cuidador.id_cuidador_paciente)">
+              🗑️ Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div *ngIf="selectedCategory === 'suplencias'" class="table-container">
+  <div class="table-wrapper">
+    <table class="styled-table" id="BaseDatosSuplencias">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Día</th>
+          <th>Hora Inicial</th>
+          <th>Hora Final</th>
+          <th>Costo por Guardia</th>
+          <th>Particular</th>
+          <th>Concurrencia</th>
+          <th>Cuidador</th>
+          <th>Pacientes</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let suplencia of filteredSuplencias; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ suplencia.dia_suplencia | date : "dd/MM/yyyy" }}</td>
+          <td>{{ suplencia.hora_inicial }}</td>
+          <td>{{ suplencia.hora_final }}</td>
+          <td>{{ suplencia.costoGuardia }}</td>
+          <td>{{ suplencia.particular }}</td>
+          <td>{{ suplencia.concurrencia_anual }}</td>
+          <td>{{ suplencia.nombreCompletoCuidador }}</td>
+          <td>{{ suplencia.nombreCompletoPaciente }}</td>
+          <td>
+            <button class="delete-button" (click)="deleteSuplencia(suplencia.id_suplencia)">
+              🗑️ Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

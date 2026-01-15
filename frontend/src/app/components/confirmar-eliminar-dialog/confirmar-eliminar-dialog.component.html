@@ -1,0 +1,17 @@
+<div class="wrapper">
+  <h1 mat-dialog-title class="custom-dialog-title">¿Estás seguro?</h1>
+  <div mat-dialog-content class="custom-dialog-content">
+    <p>
+      Esta acción eliminará al paciente de la base de datos y no se podrá
+      recuperar en ningún momento.
+    </p>
+  </div>
+  <div mat-dialog-actions class="custom-dialog-actions">
+    <button mat-button (click)="cancelar()" class="custom-dialog-button cancelar">
+      Cancelar
+    </button>
+    <button mat-button (click)="confirmar()" class="custom-dialog-button eliminar">
+      Eliminar
+    </button>
+  </div>
+</div>

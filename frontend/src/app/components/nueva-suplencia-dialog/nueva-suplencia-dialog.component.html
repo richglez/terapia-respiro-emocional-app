@@ -1,0 +1,107 @@
+<div class="wrapper">
+  <h1 mat-dialog-title class="custom-dialog-title">
+    Añade una nueva suplencia
+  </h1>
+  <div mat-dialog-content class="custom-dialog-content">
+    <div class="icon-text-container">
+      <i class="bx bxs-receipt"></i>
+      <p>Datos de la Suplencia:</p>
+    </div>
+
+    <form #suplenciaForm="ngForm" (ngSubmit)="confirmar()">
+      <p>Fecha y Hora:</p>
+      <input
+        type="date"
+        name="dia_suplencia"
+        id="dia_suplencia"
+        [(ngModel)]="suplenciasService.selectedSuplencia.dia_suplencia"
+      />
+
+      <input
+        type="time"
+        name="hora_inicial"
+        id="hora_inicial"
+        [(ngModel)]="suplenciasService.selectedSuplencia.hora_inicial"
+      />
+      <input
+        type="time"
+        name="hora_final"
+        id="hora_final"
+        [(ngModel)]="suplenciasService.selectedSuplencia.hora_final"
+      />
+      <p>Concurrencia</p>
+      <select name="repite_anual" id="repite_anual" [(ngModel)]="suplenciasService.selectedSuplencia.concurrencia_anual">
+        <option value="ANUAL">Se repite cada año</option>
+        <option value="MENSUAL">Se repite cada mes</option>
+        <option value="SEMANALMENTE">Se repite semanalmente</option>
+        <option value="2SEMANAS">Se repite cada 2 semanas</option>
+        <option value="DIARIAMENTE">Se repite diariamente</option>
+        <option value="NO">No se repite</option>
+      </select>      
+      <p>Costo:</p>
+      <input
+        type="text"
+        name="costoGuardia"
+        placeholder="Costo por guardia, ej $ 000"
+        id="costoGuardia"
+        [(ngModel)]="suplenciasService.selectedSuplencia.costoGuardia"
+      />
+      <p for="particular">Particular:</p>
+      <select
+        name="particular"
+        id="particular"
+        [(ngModel)]="suplenciasService.selectedSuplencia.particular"
+      >
+        <option value="si">Si</option>
+        <option value="no">No</option>
+      </select>
+      <p for="cuidadorPrimario">Cuidador al que se le asigna:</p>
+      <select
+        name="cuidadorPrimario"
+        id="cuidadorPrimario"
+        [(ngModel)]="suplenciasService.selectedSuplencia.id_cuidador_paciente"
+        (change)="onChangeCuidador()"
+      >
+        <option
+          *ngFor="let cuidador of cuidadores"
+          [value]="cuidador.id_cuidador_paciente"
+        >
+          {{ cuidador.nombreCuidador }} {{ cuidador.apPatCuidador }}
+          {{ cuidador.apMatCuidador }}
+        </option>
+      </select>
+
+      <p for="pacienteAsignado">¿Cuál paciente?</p>
+      <select
+        name="pacienteAsignado"
+        id="pacienteAsignado"
+        [(ngModel)]="suplenciasService.selectedSuplencia.id_paciente"
+      >
+        <option
+          *ngFor="let paciente of filteredPacientes"
+          [value]="paciente.id_paciente"
+        >
+          {{ paciente.nombre_paciente }} {{ paciente.apellido_paterno }}
+          {{ paciente.apellido_materno }}
+        </option>
+      </select>
+    </form>
+  </div>
+
+  <div mat-dialog-actions class="custom-dialog-actions">
+    <button
+      mat-button
+      (click)="cancelar()"
+      class="custom-dialog-button cancelar"
+    >
+      Cancelar Suplencia
+    </button>
+    <button
+      mat-button
+      (click)="confirmar()"
+      class="custom-dialog-button actualizar"
+    >
+      Agregar Suplencia
+    </button>
+  </div>
+</div>

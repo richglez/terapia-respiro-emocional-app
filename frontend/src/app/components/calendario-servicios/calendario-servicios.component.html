@@ -1,0 +1,78 @@
+<button class="btnSuplencia" (click)="agregarSuplencia()">
+  Agregar Suplencias
+</button>
+
+<!----------------Select cuidador-------------------->
+<div class="select-cuidador" (click)="toggleSelect()">
+  <div class="select-btn">
+    <span class="sBtn-text">{{
+      searchTextCuidadores || "Seleccionar cuidador"
+    }}</span>
+    <i
+      class="bx"
+      [class.bx-chevron-down]="!selectAbierto"
+      [class.bx-chevron-up]="selectAbierto"
+    ></i>
+  </div>
+  <ul class="options" *ngIf="selectAbierto">
+    <li
+      class="option"
+      *ngFor="let cuidador of cuidadores"
+      (click)="seleccionarCuidador(cuidador)"
+    >
+      <i class="bx bxs-user-badge"></i>
+      <span class="option-namePaciente"
+        >{{ cuidador.nombreCuidador }} {{ cuidador.apPatCuidador }}
+        {{ cuidador.apMatCuidador }}</span
+      >
+    </li>
+  </ul>
+</div>
+
+<!----------------suplencias-------------------->
+<div class="suplencias">
+  <div class="select-btn2">
+    <span class="sBtn-text">{{
+      "Total de suplencias:  " + searchTextTotalSuplencias
+    }}</span>
+  </div>
+</div>
+
+<!----------------Select paciente-------------------->
+<div class="select-paciente" (click)="toggleSelect2()">
+  <div class="select-btn">
+    <span class="sBtn-text">{{
+      searchTextPacientes || "Seleccionar paciente"
+    }}</span>
+    <i
+      class="bx"
+      [class.bx-chevron-down]="!selectAbierto2"
+      [class.bx-chevron-up]="selectAbierto2"
+    ></i>
+  </div>
+  <ul class="options" *ngIf="selectAbierto2">
+    <li
+      class="option"
+      *ngFor="let paciente of filteredPacientes"
+      (click)="seleccionarPaciente(paciente)"
+    >
+      <i class="bx bxs-user-badge"></i>
+      <span class="option-namePaciente"
+        >{{ paciente.nombre_paciente }} {{ paciente.apellido_paterno }}
+        {{ paciente.apellido_materno }}</span
+      >
+    </li>
+  </ul>
+</div>
+
+<button class="btnBuscarSuplencia" (click)="buscarSuplencia()">
+  Buscar Suplencias
+</button>
+
+<div class="calendar-container">
+  <full-calendar
+    [options]="options"
+    [events]="events"
+    class="custom-calendar"
+  ></full-calendar>
+</div>

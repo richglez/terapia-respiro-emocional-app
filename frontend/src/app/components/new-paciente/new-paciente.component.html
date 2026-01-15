@@ -1,0 +1,266 @@
+<h1>Registrar a un nuevo paciente</h1>
+<div class="form-container">
+  <form #pacientesForm="ngForm" (ngSubmit)="addPaciente(pacientesForm)">
+    <div class="form-section">
+      <h2>Informacion personal del paciente</h2>
+      <label for="name">Nombre:</label>
+      <input
+        type="text"
+        name="nombre_paciente"
+        id="name"
+        placeholder="Ingrese el Nombre"
+        [(ngModel)]="pacientesService.selectedPaciente.nombre_paciente"
+        required
+      />
+
+      <label for="lastname1">Apellido Paterno:</label>
+      <input
+        type="text"
+        name="apellido_paterno"
+        id="lastname1"
+        placeholder="Ingrese el Apellido paterno"
+        [(ngModel)]="pacientesService.selectedPaciente.apellido_paterno"
+        required
+      />
+
+      <label for="lastname2">Apellido Materno:</label>
+      <input
+        type="text"
+        name="apellido_materno"
+        id="lastname2"
+        placeholder="Ingrese el Apellido materno"
+        [(ngModel)]="pacientesService.selectedPaciente.apellido_materno"
+        required
+      />
+
+      <label for="age">Edad:</label>
+      <input
+        type="text"
+        name="edad_paciente"
+        id="age"
+        placeholder="Ingrese la edad"
+        [(ngModel)]="pacientesService.selectedPaciente.edad_paciente"
+        required
+      />
+
+      <label for="sex">Sexo:</label>
+      <select
+        name="sexo_paciente"
+        id="sex"
+        [(ngModel)]="pacientesService.selectedPaciente.sexo_paciente"
+        required
+      >
+        <option value="M">M</option>
+        <option value="F">F</option>
+      </select>
+    </div>
+
+    <div class="form-section">
+      <h2>Acerca de</h2>
+      <label for="state">Entidad Federativa:</label>
+      <select
+        name="entidadFederativa"
+        id="state"
+        [(ngModel)]="pacientesService.selectedPaciente.entidadFederativa"
+        #entidadFederativaSelect="ngModel"
+      >
+        <option value="EDO. DE MEX">EDO. DE MEX</option>
+        <option value="CDMX">CDMX</option>
+        <option value="GUERRERO">GUERRERO</option>
+        <option value="PUEBLA">PUEBLA</option>
+        <option value="" id="btnOtro">Otro</option>
+      </select>
+
+      <div *ngIf="entidadFederativaSelect.value === ''" id="divOtros">
+        <label for="txtOtroTipoEntidad"
+          >Especificar la entidad federativa:</label
+        >
+        <input
+          type="text"
+          id="txtOtroTipoEntidad"
+          name="otraEntidadFederativa"
+          placeholder="Especificar otro tipo de entidad federativa"
+          [(ngModel)]="otraEntidadFederativa"
+          required
+        />
+      </div>
+
+      <label for="nacionality">Nacionalidad:</label>
+      <select
+        name="nacionalidad"
+        id="nacionalidad"
+        [(ngModel)]="pacientesService.selectedPaciente.nacionalidad"
+        required
+        #tipoNacionalidadSelect="ngModel"
+      >
+        <option value="Mexicana">Mexicana</option>
+        <option value="Estadounidense ">Estadounidense</option>
+        <option value="">Otro</option>
+      </select>
+
+      <div *ngIf="tipoNacionalidadSelect.value === ''">
+        <label for="txtOtroTipoNacionalidad">Especificar nacionalidad:</label>
+        <input
+          type="text"
+          id="txtOtroTipoNacionalidad"
+          name="otraNacionalidad"
+          placeholder="Especificar otro tipo de nacionalidad"
+          [(ngModel)]="otraNacionalidad"
+          required
+        />
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h2>Dirección</h2>
+
+      <label for="txtDomicilio">Domicilio:</label>
+      <input
+        type="text"
+        name="domicilio"
+        id="txtDomicilio"
+        placeholder="Ingrese el domicilio"
+        [(ngModel)]="pacientesService.selectedPaciente.domicilio"
+        required
+      />
+
+      
+      <label for="txtColonia">Colonia:</label>
+      <input
+        type="text"
+        name="colonia"
+        id="txtColonia"
+        placeholder="Ingrese la colonia"
+        [(ngModel)]="pacientesService.selectedPaciente.colonia"
+        required
+      />
+
+
+      <label for="txtDomicilio">Alcaldia / Municipio</label>
+      <input
+        type="text"
+        name="alcaldia_municipio"
+        id="txtAlcalMun"
+        placeholder="Ingrese el la alcaldia/municipio"
+        [(ngModel)]="pacientesService.selectedPaciente.alcaldia_municipio"
+        required
+      />
+    </div>
+
+    <div class="form-section">
+      <h2>Diagnostico Médico</h2>
+      <label for="txtDiagnostico">Diagnostico:</label>
+      <input
+        type="text"
+        name="diagnostico"
+        id="txtDiagnostico"
+        placeholder="Cual es el diagnostico del paciente?"
+        [(ngModel)]="pacientesService.selectedPaciente.diagnostico"
+        required
+      />
+
+    </div>
+
+    <div class="form-section">
+      <h2>Cuidadores</h2>
+      <label for="txtCuidador">Cuidador Primario:</label>
+      <select
+        id="txtCuidador"
+        name="cuidadorPrimario"
+        [(ngModel)]="selectedCuidadorId"
+        required
+      >
+        <option
+          *ngFor="let cuidador of cuidadoresList"
+          [value]="cuidador.id_cuidador_paciente"
+        >
+          {{ cuidador.nombreCuidador }} {{ cuidador.apPatCuidador }}
+          {{ cuidador.apMatCuidador }}
+        </option>
+      </select>
+      <input type="hidden" name="id_cuidador_paciente" [value]="selectedCuidadorId" />
+
+      <label for="txtParentesco">Que Parentesco del cuidador tiene con este paciente?:</label>
+      <input type="text" name="parentesco_con_cuidador" id="txtParentesco" placeholder="Parentesco con este paciente" [(ngModel)]="pacientesService.selectedPaciente.parentesco_con_cuidador" />
+      <label for="txtSegundoCuidador">Segundo Cuidador:</label>
+      <select
+        name="segundoCuidador"
+        id="segundoCuidador"
+        [(ngModel)]="segundoCuidadorOption"
+        (change)="onSegundoCuidadorChange($event)"
+      >
+        <option value="Si Tiene">Si Tiene</option>
+        <option value="N/A">No Tiene</option>
+      </select>
+
+      <div *ngIf="mostrarSegundoCuidador">
+        <label for="txtCuidadorSecundario">Cuidador Secundario:</label>
+        <select
+          id="txtCuidadorSecundario"
+          name="cuidadorSecundario"
+          [(ngModel)]="selectedCuidadorSecundarioId"
+        >
+          <option
+            *ngFor="let cuidador of cuidadoresList"
+            [value]="cuidador.id_cuidador_paciente"
+          >
+            {{ cuidador.nombreCuidador }} {{ cuidador.apPatCuidador }}
+            {{ cuidador.apMatCuidador }}
+          </option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="form-section">
+      <h2>Detalles del registro</h2>
+      <label for="txtFechaIngreso">Fecha de ingreso:</label>
+      <input
+        type="date"
+        name="txtFechaIngreso"
+        id="txtFechaIngreso"
+        [(ngModel)]="txtFechaIngreso"
+        readonly
+      />
+
+      <label for="txtTipoPrograma">Tipo de programa:</label>
+      <select
+        name="tipoPrograma"
+        id="txtTipoPrograma"
+        [(ngModel)]="pacientesService.selectedPaciente.tipoPrograma"
+        required
+        #tipoProgramaSelect="ngModel"
+      >
+        <option value="CECPAM">CECPAM</option>
+        <option value="NMP">NMP</option>
+        <option value="FGRA">FGRA</option>
+        <option value="SLIM">SLIM</option>
+        <option value="Privados">Privados</option>
+        <option value="" id="btnOtro">Otro</option>
+      </select>
+
+      <div *ngIf="tipoProgramaSelect.value === ''">
+        <!--Cuando el value sea campo vacio quiere decir que es otro-->
+        <label for="txtOtroTipoPrograma">Especificar:</label>
+        <input type="text" id="txtOtroTipoPrograma" name="otroTipoPrograma" placeholder="Especificar otro tipo de programa" [(ngModel)]="otroTipoPrograma" required />
+      </div>
+
+      <label for="txtExpediente">Expediente:</label>
+
+      <input
+        type="text"
+        name="expediente_paciente"
+        id="txtExpediente"
+        placeholder="00/000"
+        [(ngModel)]="expediente_paciente"
+        required
+      />
+      <div *ngIf="expedienteExistenteError" class="error-message">
+        * Este expediente ya está en uso
+      </div>
+    </div>
+    <!-- <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div> -->
+
+    <input type="submit" value="Registrar" id="btnRegistrar" />
+  </form>
+</div>

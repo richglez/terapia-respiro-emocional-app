@@ -1,0 +1,45 @@
+.wrapper {
+  background-color: #ffffff; /* Cambiar a blanco */
+
+  .custom-dialog-title {
+    color: #333;
+    font-size: 24px;
+  }
+
+  .custom-dialog-content {
+    color: #666;
+    font-size: 16px;
+  }
+
+  .custom-dialog-actions {
+    justify-content: flex-end;
+    margin-top: 20px;
+
+    button {
+      margin-left: 10px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+
+      &.cancelar {
+        background-color: #f44336; /* Rojo */
+        color: white; /* Texto blanco */
+
+        &:hover {
+          background-color: darken(#f44336, 10%);
+        }
+      }
+
+      &.eliminar {
+        background-color: #2196f3; /* Azul */
+        color: white; /* Texto blanco */
+
+        &:hover {
+          background-color: darken(#2196f3, 10%);
+        }
+      }
+    }
+  }
+}

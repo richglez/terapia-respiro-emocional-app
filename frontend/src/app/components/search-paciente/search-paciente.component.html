@@ -1,0 +1,240 @@
+<div class="container">
+  <div class="search-paciente-container">
+    <div class="search-header">
+      <i class="material-icons">people</i>
+      <h1>Lista de Pacientes</h1>
+    </div>
+
+    <div class="search-paciente-container2">
+      <i class="bx bx-search"></i>
+
+      <input
+        type="search"
+        name="txtSearchPaciente"
+        id="txtSearchPaciente"
+        placeholder="Buscar paciente"
+        [(ngModel)]="searchTextPacientes"
+        (input)="buscarPacienteDB()"
+      />
+    </div>
+
+    <div
+      class="paciente-find-card"
+      *ngFor="let paciente of pacientes"
+      (click)="seleccionarPaciente(paciente)"
+    >
+      <i class="bx bxs-user-pin"></i>
+      <h3 class="paciente-find-name">
+        {{ paciente.nombre_paciente }} {{ paciente.apellido_paterno }}
+      </h3>
+      <!--Nombre del paciente-->
+      <p class="lastUpdate">
+        {{ paciente?.ultima_modificacion | date : "dd/MM/yyyy" }}
+      </p>
+      <!--Ultima modificacion fue el: 27/02/2024-->
+    </div>
+  </div>
+
+  <!--------------------------------------------------------------------------------->
+
+  <div class="ficha-paciente">
+    <div class="container2-title1">
+      <h1>Ficha del paciente</h1>
+      <div class="actions">
+        <div class="button-container">
+          <button (click)="deletePacienteDialog()">
+            <i class="bx bx-trash"></i>
+          </button>
+          <span>Eliminar</span>
+        </div>
+        <div class="button-container">
+          <button (click)="editPaciente()">
+            <i class="bx bx-edit-alt"></i>
+          </button>
+          <span>Editar</span>
+        </div>
+      </div>
+    </div>
+
+    <i class="bx bxs-user-pin"></i>
+
+    <!-- <div *ngIf="!selectedPaciente" class="mensaje-eliminado">
+      <p>El paciente ha sido eliminado correctamente.</p>
+    </div> -->
+
+    <div class="container-data-paciente" *ngIf="selectedPaciente">
+      <label for="exp">Expediente:</label>
+      <input
+        type="text"
+        name="exp"
+        id="exp"
+        readonly
+        [(ngModel)]="selectedPaciente.expediente_paciente"
+      />
+    </div>
+
+    <div class="container-data-paciente" *ngIf="selectedPaciente">
+      <label for="dateAdmission">Fecha de ingreso:</label>
+      <input
+        type="text"
+        name="dateAdmission"
+        id="dateAdmission"
+        readonly
+        [(ngModel)]="selectedPaciente.ingreso_programa"
+      />
+    </div>
+    <div class="container-data-paciente" *ngIf="selectedPaciente">
+      <label for="name">Nombre:</label>
+      <input
+        type="text"
+        name="name"
+        id="name"
+        readonly
+        [(ngModel)]="selectedPaciente.nombre_paciente"
+      />
+    </div>
+
+    <div class="container-data-paciente" *ngIf="selectedPaciente">
+      <label for="lastname1">Apellido Paterno:</label>
+      <input
+        type="text"
+        name="lastName1"
+        id="lastname1"
+        readonly
+        [(ngModel)]="selectedPaciente.apellido_paterno"
+      />
+    </div>
+    <div class="container-data-paciente" *ngIf="selectedPaciente">
+      <label for="lastname2">Apellido Materno:</label>
+      <input
+        type="text"
+        name="lastName2"
+        id="lastname2"
+        readonly
+        [(ngModel)]="selectedPaciente.apellido_materno"
+      />
+    </div>
+    <div class="container-data-paciente" *ngIf="selectedPaciente">
+      <label for="age">Edad:</label>
+      <input
+        type="text"
+        name="age"
+        id="age"
+        readonly
+        [(ngModel)]="selectedPaciente.edad_paciente"
+      />
+    </div>
+    <div class="container-data-paciente" *ngIf="selectedPaciente">
+      <label for="sex">Sexo:</label>
+      <input
+        type="text"
+        name="sex"
+        id="sex"
+        readonly
+        [(ngModel)]="selectedPaciente.sexo_paciente"
+      />
+    </div>
+    <div class="container-data-paciente" *ngIf="selectedPaciente">
+      <label for="municipality">Alcaldia / Municipio:</label>
+      <input
+        type="text"
+        name="municipality"
+        id="municipality"
+        readonly
+        [(ngModel)]="selectedPaciente.alcaldia_municipio"
+      />
+    </div>
+    <div class="container-data-paciente" *ngIf="selectedPaciente">
+      <label for="state">Entidad Federativa</label>
+      <input
+        type="text"
+        name="state"
+        id="state"
+        readonly
+        [(ngModel)]="selectedPaciente.entidadFederativa"
+      />
+    </div>
+    <div class="container-data-paciente" *ngIf="selectedPaciente">
+      <label for="nacionality">Nacionalidad:</label>
+      <input
+        type="text"
+        name="nacionality"
+        id="nacionality"
+        readonly
+        [(ngModel)]="selectedPaciente.nacionalidad"
+      />
+    </div>
+    <div class="container-data-paciente" *ngIf="selectedPaciente">
+      <label for="type">Tipo de Programa:</label>
+      <input
+        type="text"
+        name="type"
+        id="type"
+        readonly
+        [(ngModel)]="selectedPaciente.tipoPrograma"
+      />
+    </div>
+
+    <div class="container2-title2">
+      <h2>Diagnostico del paciente</h2>
+    </div>
+    <div class="container-data-paciente" *ngIf="selectedPaciente">
+      <label for="recomedations">Recomendaciones:</label>
+      <input
+        type="text"
+        name="recomedations"
+        id="recomedations"
+        readonly
+        [(ngModel)]="selectedPaciente.recomendaciones"
+      />
+    </div>
+    <div class="container-data-paciente" *ngIf="selectedPaciente">
+      <label for="observations">Observaciones:</label>
+      <input
+        type="text"
+        name="observations"
+        id="observations"
+        readonly
+        [(ngModel)]="selectedPaciente.observaciones"
+      />
+    </div>
+    <div class="container-data-paciente" *ngIf="selectedPaciente">
+      <label for="diagnostic">Diagnostico:</label>
+      <input
+        type="text"
+        name="diagnostic"
+        id="diagnostic"
+        readonly
+        [(ngModel)]="selectedPaciente.diagnostico"
+      />
+    </div>
+    <div class="container-data-paciente" *ngIf="selectedPaciente">
+      <label for="primaryCaregiver">Cuidador Primario:</label>
+      <input
+        type="text"
+        name="primaryCaregiver"
+        id="primaryCaregiver"
+        [value]="nombreCompletoCuidador"
+        readonly
+      />
+    </div>
+    <div class="container-data-paciente" *ngIf="selectedPaciente">
+      <label for="relationship">Parentesco con el paciente:</label>
+      <input
+        type="text"
+        name="parentesco"
+        id="txtParentesco"
+        [(ngModel)]="selectedPaciente.parentesco_con_cuidador"
+        readonly
+      />
+    </div>
+    <div class="actions2">
+      <button class="btnUpdate" (click)="updatePacienteDialog()">
+        Actualizar cambios
+      </button>
+      <button class="btnUndo" (click)="undoChangesPaciente()">
+        Deshacer cambios
+      </button>
+    </div>
+  </div>
+</div>

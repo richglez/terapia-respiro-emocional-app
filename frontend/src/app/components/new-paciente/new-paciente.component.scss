@@ -1,0 +1,114 @@
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 900;
+}
+
+.form-container {
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos se ajusten al ancho del contenedor */
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
+
+    #btnRegistrar {
+        background-color: #4D98FF;
+        color: white;
+        cursor: pointer;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 5px;
+        font-size: 16px;
+        text-transform: uppercase;
+        transition: background-color 0.3s;
+        // otros estilos...
+        margin: 20px auto; // Centrar el botón horizontalmente
+        display: block; // Asegurar que sea un elemento de bloque
+
+
+        &:hover {
+            background-color: #357ac0;
+        }
+
+        &:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(77, 152, 255, 0.4);
+        }
+
+        &:active {
+            transform: translateY(1px);
+        }
+    }
+
+
+
+    #btnOtro{
+        background-color: #cfe2fc;
+    }
+
+    #divOtros{
+        margin-bottom: 40px;
+    }
+
+    select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid #4D98FF;
+        background-color: #E6F1FF;
+        color: #333;
+        font-size: 16px;
+    
+        &:focus {
+            outline: 2px solid #4D98FF;
+        }
+    }
+    
+}
+
+.form-section {
+    flex: 1;
+    margin-right: 70px;
+
+    @media (max-width: 768px) {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        color: #4D98FF;
+        margin-top: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #4D98FF;
+    }
+
+    input[type="text"],
+    input[type="date"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid #4D98FF;
+        background-color: #E6F1FF;
+        font-size: 16px;
+
+        &:focus {
+            outline: 2px solid #4D98FF;
+        }
+    }
+}

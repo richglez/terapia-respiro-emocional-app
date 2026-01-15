@@ -1,0 +1,82 @@
+/* You can add global styles to this file, and also import other style files */
+
+* {
+    padding: 0;
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+}
+body {
+    background-color: #f6fafd;
+    overflow-x: hidden; /* Oculta la barra de desplazamiento horizontal */
+}
+
+.main-snackbar {
+    .mdc-snackbar__surface {
+        background-color: #d4edda !important;
+        border: #D6E9C6 solid 1px;
+    }
+
+    .mdc-snackbar__label {
+        color: #697668 !important;
+    }
+    
+    .mat-mdc-snack-bar-actions {
+        button {
+            color: #000000 !important;
+        }
+    }
+}
+
+
+.error-snackbar {
+    .mdc-snackbar__surface {
+        background-color: #F5CBCA !important;
+        border: #e29b9a solid 1px;
+    }
+
+    .mdc-snackbar__label {
+        color: #CE3935 !important;
+    }
+    
+    .mat-mdc-snack-bar-actions {
+        button {
+            color: #5f0f0f !important;
+        }
+    }
+}
+
+
+.important-snackbar {
+    .mdc-snackbar__surface {
+        background-color: #cadef5 !important;
+        border: #9ac1e2 solid 1px;
+    }
+
+    .mdc-snackbar__label {
+        color: #3591ce !important;
+    }
+    
+    .mat-mdc-snack-bar-actions {
+        button {
+            color: #0f325f !important;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+html,
+body {
+    height: 100%;
+}
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}

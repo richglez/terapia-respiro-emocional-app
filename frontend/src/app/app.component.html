@@ -1,0 +1,16 @@
+<div class="container">
+  <div class="header">
+    <nav class="nav-header">
+      <ul>
+        <li>
+          <a href="#" class="app-tile">C CUIDARTE</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <app-sidenav (onToggleSideNav)="onToggleSideNav($event)"></app-sidenav>
+  <app-body
+    [collapsed]="isSideNavCollapsed"
+    [screenWidth]="screenWidth"
+  ></app-body>
+</div>

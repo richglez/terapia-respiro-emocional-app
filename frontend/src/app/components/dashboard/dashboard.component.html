@@ -1,0 +1,99 @@
+<div class="header">
+  <h1>Panel de Control</h1>
+  <div class="linea-separadora"></div>
+  <h5>Inicio</h5>
+</div>
+
+<div class="container">
+  <div class="card-container">
+    <h1>Estadísticas</h1>
+    <div class="totalStatistics">
+      <div class="info-card">
+        <i class="bx bxs-heart-circle"></i>
+        <span>{{ totalPacientes }}</span>
+        <p>Pacientes Registrados</p>
+      </div>
+      <div class="info-card">
+        <i class="bx bx-group"></i>
+        <span>{{ totalCuidadores }}</span>
+        <p>Cuidadores Registrados</p>
+      </div>
+      <div class="info-card">
+        <i class="bx bxs-calendar-heart"></i>
+        <span>{{ totalSuplencias }}</span>
+        <p>Total de Suplencias Registradas</p>
+      </div>
+      <div class="info-card">
+        <i class="bx bx-child"></i>
+        <span>{{ totalPacientesMenores }}</span>
+        <p>Total de Pacientes Menores de Edad</p>
+      </div>
+      <div class="info-card">
+        <i class="bx bxs-user"></i>
+        <span>{{ totalPacientesMayores }}</span>
+        <p>Total de Pacientes Mayores de Edad</p>
+      </div>
+      <div class="info-card">
+        <i class="bx bx-plus-medical"></i>
+        <span>{{ totalCECPAM }}</span>
+        <p>Total de Programas por CECPAM</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="mini-calendar">
+    <div class="calendar-header">
+      <span class="calendar-month">{{ currentMonth }}</span>
+      <span class="calendar-year">{{ currentYear }}</span>
+    </div>
+    <div class="calendar-grid">
+      <div class="calendar-day" *ngFor="let day of daysInMonth" [ngClass]="{'today': isToday(day), 'has-suplement': hasSuplement(day)}">
+        {{ day.date }}
+      </div>
+    </div>
+  </div> -->
+  
+
+  
+  <div class="card-container">
+    <div class="time">
+      <h1>Hora</h1>
+      <div class="info-card-time">
+        <i class="bx bx-time-five"></i>
+        <span>{{ horaHoy }}</span>
+        <p>{{ fechaHoy }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-container">
+    <div class="calendar-dashboard">
+      <h1>Próximas 6 Suplencias</h1>
+      <div class="upcoming-suplencias-container">
+        <div *ngFor="let suplencia of proximasSuplencias" class="suplencia">
+          <div class="suplencia-date">
+            <div class="day-of-week">{{ suplencia.dia_semana | slice:0:3 }}</div>
+            <div class="day">{{ suplencia.dia }}</div>
+            <div class="month">{{ suplencia.mes | slice:0:3 }}</div>
+          </div>
+          <div class="suplencia-details">
+            <div>{{ suplencia.nombreCompletoCuidador }} y {{ suplencia.nombreCompletoPaciente }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-container">
+    <div class="info">
+      <h1>      <i class='bx bxs-help-circle'></i>Aprende Más</h1>
+      <ul>
+        <li>
+          <h3><a href="../../../assets/Documentacion y Guia de Uso App TerapiaRE 2024.pdf" download="Documentacion - Terapia Respiro Emocional 2024">Documentación</a></h3>
+          <h3><a href="https://cecpam.org/">CECPAM</a></h3>
+          <h3><a href="https://cecpam.org/que-hacemos/terapia-respiro-emocional/">Terapia Respiro Emocional</a></h3>
+        </li>
+      </ul>
+    </div>
+  </div>  
+</div>

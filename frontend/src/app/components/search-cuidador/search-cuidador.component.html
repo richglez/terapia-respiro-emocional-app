@@ -1,0 +1,151 @@
+<div class="container">
+  <div class="search-cuidador-container">
+    <div class="search-header">
+      <i class="material-icons">people</i>
+      <h1>Lista de Cuidadores</h1>
+    </div>
+
+    <div class="search-cuidador-container2">
+      <i class="bx bx-search"></i>
+
+      <input
+        type="search"
+        name="txtSearchCuidador"
+        id="txtSearchCuidador"
+        placeholder="Buscar cuidador"
+        [(ngModel)]="searchTextCuidador"
+        (input)="buscarCuidadorDB()"
+      />
+    </div>
+
+    <div
+      class="cuidador-find-card"
+      *ngFor="let cuidador of cuidadores"
+      (click)="seleccionarCuidador(cuidador)"
+    >
+      <i class="bx bxs-user-pin"></i>
+      <h3 class="cuidador-find-name">
+        {{ cuidador.nombreCuidador }} {{ cuidador.apPatCuidador }}
+      </h3>
+      <!--Nombre del cuidador-->
+      <p class="lastUpdate">
+        {{ cuidador?.ultima_modificacion | date : "dd/MM/yyyy" }}
+      </p>
+      <!--Ultima modificacion fue el: 27/02/2024-->
+    </div>
+  </div>
+
+  <!--------------------------------------------------------------------------------->
+
+  <div class="ficha-cuidador">
+    <div class="container2-title1">
+      <h1>Ficha del cuidador</h1>
+      <div class="actions">
+        <div class="button-container">
+          <button (click)="deleteCuidadorDialog()">
+            <i class="bx bx-trash"></i>
+          </button>
+          <span>Eliminar</span>
+        </div>
+        <div class="button-container">
+          <button (click)="editCuidador()">
+            <i class="bx bx-edit-alt"></i>
+          </button>
+          <span>Editar</span>
+        </div>
+      </div>
+    </div>
+
+    <i class="bx bxs-user-pin"></i>
+
+    <!-- <div *ngIf="!selectedCuidador" class="mensaje-eliminado">
+      <p>El cuidador ha sido eliminado correctamente.</p>
+    </div> -->
+
+    <div class="container-data-cuidador" *ngIf="selectedCuidador">
+      <label for="fechI">Fecha de ingreso:</label>
+      <input
+        type="text"
+        name=""
+        id="fechI"
+        readonly
+        [(ngModel)]="selectedCuidador.ingreso_programa"
+      />
+    </div>
+
+    <div class="container-data-cuidador" *ngIf="selectedCuidador">
+      <label for="name">Nombre:</label>
+      <input
+        type="text"
+        name=""
+        id="name"
+        readonly
+        [(ngModel)]="selectedCuidador.nombreCuidador"
+      />
+    </div>
+
+    <div class="container-data-cuidador" *ngIf="selectedCuidador">
+      <label for="lastname1">Apellido Paterno:</label>
+      <input
+        type="text"
+        name=""
+        id="lastname1"
+        readonly
+        [(ngModel)]="selectedCuidador.apPatCuidador"
+      />
+    </div>
+
+    <div class="container-data-cuidador" *ngIf="selectedCuidador">
+      <label for="lastname2">Apellido Materno:</label>
+      <input
+        type="text"
+        name=""
+        id="lastname2"
+        readonly
+        [(ngModel)]="selectedCuidador.apMatCuidador"
+      />
+    </div>
+
+    <div class="container-data-cuidador" *ngIf="selectedCuidador">
+      <label for="sex">Sexo:</label>
+      <input
+        type="text"
+        name=""
+        id="sex"
+        readonly
+        [(ngModel)]="selectedCuidador.sexoCuidador"
+      />
+    </div>
+
+    <div class="container-data-cuidador" *ngIf="selectedCuidador">
+      <label for="age">Edad:</label>
+      <input
+        type="text"
+        name=""
+        id="age"
+        readonly
+        [(ngModel)]="selectedCuidador.edadCuidador"
+      />
+    </div>
+
+    <div class="container-data-cuidador" *ngIf="selectedCuidador">
+      <label for="telefono">Telefono:</label>
+      <input
+        type="text"
+        name=""
+        id="telefono"
+        readonly
+        [(ngModel)]="selectedCuidador.telefonoCuidador"
+      />
+    </div>
+
+    <div class="actions2">
+      <button class="btnUpdate" (click)="updateCuidadorDialog()">
+        Actualizar cambios
+      </button>
+      <button class="btnUndo" (click)="undoChangesCuidador()">
+        Deshacer cambios
+      </button>
+    </div>
+  </div>
+</div>

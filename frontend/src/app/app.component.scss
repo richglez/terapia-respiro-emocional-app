@@ -1,0 +1,60 @@
+
+
+.header {
+    background-color: #1C4692;
+    color: #fff;
+    font-family: neon, sans-serif;
+    text-align: left;
+    padding: 15px;
+    display: flex; /* Añadir esta línea */
+    justify-content: space-between; /* Añadir esta línea para separar los elementos */
+
+
+    
+
+    .nav-header {
+        ul {
+            list-style-type: none; /* Quita las viñetas */
+            padding: 0;
+            margin: 0; /* Agrega este margen para quitar el espacio predeterminado de la lista */
+            display: flex; /* Usa flexbox para alinear los elementos horizontalmente */
+            align-items: center; /* Alinea verticalmente al centro */
+        }
+        
+        li {
+            margin-left: 20px; /* Espaciado entre elementos */
+            &:first-child {
+                margin-left: 0; /* Quita el margen izquierdo del primer elemento */
+            }
+        }
+        
+        .btnMenu {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            margin-top: 5px; /* Ajusta el margen superior según sea necesario */
+        }
+
+        
+
+        .btnMenu i {
+            font-size: 28px;
+        }
+        
+        .app-tile {
+            font-size: 24px;
+            text-decoration: none;
+            color: #fff;
+            margin-left: 100px; /* Ajusta el margen izquierdo según sea necesario */
+            text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #1C4692, 0 0 40px #1C4692, 0 0 50px #1C4692, 0 0 60px #1C4692, 0 0 70px #1C4692;
+        }
+    }
+
+    
+}
+
+
+
+
+

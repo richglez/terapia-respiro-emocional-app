@@ -1,0 +1,122 @@
+@import "boxicons/css/boxicons.min.css";
+
+
+.wrapper {
+  background-color: #ffffff; /* Cambiar a blanco */
+}
+
+.custom-dialog-title {
+  color: #333;
+  font-size: 24px;
+}
+
+.custom-dialog-content {
+  color: #666;
+  font-size: 16px;
+}
+
+.custom-dialog-actions {
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.custom-dialog-actions button {
+  margin-left: 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.custom-dialog-actions button.cancelar {
+  background-color: #f44336; /* Rojo */
+  color: white; /* Texto blanco */
+}
+
+.custom-dialog-actions button.cancelar:hover {
+  background-color: darken(#f44336, 10%);
+}
+
+.custom-dialog-actions button.actualizar {
+  background-color: #2196f3; /* Azul */
+  color: white; /* Texto blanco */
+}
+
+.custom-dialog-actions button.actualizar:hover {
+  background-color: darken(#2196f3, 10%);
+}
+
+
+/* Estilos para los inputs */
+form input[type="date"],
+form input[type="time"],
+form input[type="text"],
+form select {
+  padding: 9px;
+  border: 2px solid #2196f3;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  margin-right: 5px;
+  width: 30%;
+  color: #115083;
+  box-sizing: border-box; /* Incluir el padding en el ancho total */
+  margin-bottom: 14px;
+}
+
+/* Estilos para las opciones del select */
+form select option {
+  padding: 10px;
+  color: #115083;
+  background-color: #fff;
+  font-size: 14px;
+  overflow-y: auto; /* Mostrar barra de desplazamiento vertical cuando sea necesario */
+  scrollbar-width: thin; /* Grosor de la barra de desplazamiento */
+  scrollbar-color: #2196f3 transparent; /* Color de la barra de desplazamiento y su fondo */
+}
+
+
+
+/* Estilos para el select cuando está enfocado */
+form select:focus {
+  outline: none; /* Eliminar el contorno de enfoque predeterminado */
+  border-color: #2196f3; /* Cambiar el color del borde al azul */
+}
+
+
+/* Estilos para los inputs cuando están enfocados */
+form input:focus {
+  outline: none; /* Eliminar el contorno de enfoque predeterminado */
+  border-color: #2196f3; /* Cambiar el color del borde al azul */
+  
+}
+
+/* Estilos para los inputs cuando están deshabilitados */
+form input:disabled {
+  background-color: #f9f9f9; /* Cambiar el color de fondo a gris claro */
+  cursor: not-allowed; /* Cambiar el cursor a no permitido */
+}
+
+form p{
+  color: #2196f3;
+}
+
+
+
+
+
+.icon-text-container {
+  display: flex; /* Utilizar flexbox */
+  align-items: center; /* Centrar verticalmente los elementos */
+}
+
+.icon-text-container .bxs-receipt{
+  font-size: 25px;
+  margin-right: 10px;
+  margin-bottom: 60px;
+  color: #2481ff;
+}
+
+.icon-text-container p{
+  margin-bottom: 60px;
+}

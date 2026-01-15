@@ -1,0 +1,794 @@
+Estoy creando una app web desde angular usando angular para el frontend y nodejs para el backend y MYSQL para una conexion de base de datos, la app ya se encuentra operando, tengo varios componenetes uno de ellos se llama (calendario-servicios) en este servicio estoy tratando de emular una calendario donde se puedan crear suplencias que serian los eventos en terminos de agendar en los calendarios como lo hace google calendar y asi, pero en angular estoy usando la herramienta de (fullcalendar).
+Bien para agendar una nueva suplencia estoy usando otra herramienta de angular llamada (MatDialogRef), donde mi ventanilla la estoy programando desde otro componenete llamado (nueva-suplencia-dialog.component) donde este componente se encargara de un pequeno formulario para poder registrar las suplencias en una tabla de mi base de datos (suplencias), esta formulario recopilara todos los datos de mi tabla, estas suplencias se le asginan a un cuidador en especifico, para luego poder buscar esas suplencias apartir de un cuidador y un paciente que el cuidador esta cuidando, osea cada paciente tiene a un cuidador y un cuidador puede tener varios pacientes y asi, para que luego se haga una validacion en el boton de buscar todas las suplencias que tiene el cuidador con ese paciente seleccionado y asi
+
+Ya tengo creado mi componente y mi formulario ya funciona para poder registrar nuevas suplencias y el filtrado de cuidaodres con sus pacientes en especificos tambien, lo que falta es poder programar el boton de buscarSuplencia(), para que asi muestre el o los eventos en el calendario apartir de la fecha y la hora inicial y la hora final, como puedo programar el boton de buscar suplencias y el calendario este programado y no se vea solo de adorno, porque nadamas me muestra la fecha actual y eso no quiero,
+
+
+como puedo programar que este boton pueda refleja el evento en el calendario?
+
+osea por ejemplo quiero que se refleje en mi calendario los eventos(suplencias) las suplencias que tengo en mi base de datos:
+
+
+mysql> DESCRIBE pacientes;
++-------------------------+--------------+------+-----+-------------------+-----------------------------------------------+
+| Field                   | Type         | Null | Key | Default           | Extra                                         |
++-------------------------+--------------+------+-----+-------------------+-----------------------------------------------+
+| id_paciente             | int unsigned | NO   | PRI | NULL              | auto_increment                                |
+| expediente_paciente     | varchar(255) | YES  |     | NULL              |                                               |
+| nombre_paciente         | varchar(255) | YES  |     | NULL              |                                               |
+| apellido_paterno        | varchar(255) | YES  |     | NULL              |                                               |
+| apellido_materno        | varchar(255) | YES  |     | NULL              |                                               |
+| sexo_paciente           | char(1)      | YES  |     | NULL              |                                               |
+| edad_paciente           | int          | YES  |     | NULL              |                                               |
+| ingreso_programa        | timestamp    | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED                             |
+| ultima_modificacion     | timestamp    | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
+| nacionalidad            | varchar(255) | YES  |     | NULL              |                                               |
+| domicilio               | varchar(255) | YES  |     | NULL              |                                               |
+| colonia                 | varchar(255) | YES  |     | NULL              |                                               |
+| alcaldia_municipio      | varchar(255) | YES  |     | NULL              |                                               |
+| entidadFederativa       | varchar(255) | YES  |     | NULL              |                                               |
+| diagnostico             | varchar(255) | YES  |     | NULL              |                                               |
+| parentesco_con_cuidador | varchar(255) | YES  |     | NULL              |                                               |
+| tipoPrograma            | varchar(255) | YES  |     | NULL              |                                               |
+| observaciones           | varchar(255) | YES  |     | NULL              |                                               |
+| recomendaciones         | varchar(255) | YES  |     | NULL              |                                               |
+| id_cuidador_paciente    | int unsigned | YES  | MUL | NULL              |                                               |
++-------------------------+--------------+------+-----+-------------------+-----------------------------------------------+
+20 rows in set (0.01 sec)
+
+mysql> DESCRIBE cuidadores;
++----------------------+--------------+------+-----+-------------------+-----------------------------------------------+
+| Field                | Type         | Null | Key | Default           | Extra                                         |
++----------------------+--------------+------+-----+-------------------+-----------------------------------------------+
+| id_cuidador_paciente | int unsigned | NO   | PRI | NULL              | auto_increment                                |
+| nombreCuidador       | varchar(255) | NO   |     | NULL              |                                               |
+| apPatCuidador        | varchar(255) | NO   |     | NULL              |                                               |
+| apMatCuidador        | varchar(255) | NO   |     | NULL              |                                               |
+| sexoCuidador         | char(1)      | NO   |     | NULL              |                                               |
+| edadCuidador         | int          | NO   |     | NULL              |                                               |
+| telefonoCuidador     | varchar(30)  | NO   |     | NULL              |                                               |
+| ingreso_programa     | timestamp    | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED                             |
+| ultima_modificacion  | timestamp    | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
+| num_suplencias       | int          | NO   |     | 0                 |                                               |
++----------------------+--------------+------+-----+-------------------+-----------------------------------------------+
+10 rows in set (0.00 sec)
+
+mysql> DESCRIBE suplencias;
++----------------------+--------------+------+-----+---------+----------------+
+| Field                | Type         | Null | Key | Default | Extra          |
++----------------------+--------------+------+-----+---------+----------------+
+| id_suplencia         | int unsigned | NO   | PRI | NULL    | auto_increment |
+| dia_suplencia        | date         | YES  |     | NULL    |                |
+| hora_inicial         | varchar(255) | YES  |     | NULL    |                |
+| hora_final           | varchar(255) | YES  |     | NULL    |                |
+| costoGuardia         | int          | YES  |     | NULL    |                |
+| particular           | varchar(80)  | YES  |     | NULL    |                |
+| id_cuidador_paciente | int unsigned | YES  | MUL | NULL    |                |
+| id_paciente          | int unsigned | YES  | MUL | NULL    |                |
++----------------------+--------------+------+-----+---------+----------------+
+8 rows in set (0.00 sec)
+
+
+CODIGO HTML DEL COMPONENTE DEL CALENDARIO
+calendario-servicios.component.html
+<button class="btnSuplencia" (click)="agregarSuplencia()">
+  Agregar Suplencias
+</button>
+
+<!----------------Select cuidador-------------------->
+<div class="select-cuidador" (click)="toggleSelect()">
+  <div class="select-btn">
+    <span class="sBtn-text">{{
+      searchTextCuidadores || "Seleccionar cuidador"
+    }}</span>
+    <i
+      class="bx"
+      [class.bx-chevron-down]="!selectAbierto"
+      [class.bx-chevron-up]="selectAbierto"
+    ></i>
+  </div>
+  <ul class="options" *ngIf="selectAbierto">
+    <li
+      class="option"
+      *ngFor="let cuidador of cuidadores"
+      (click)="seleccionarCuidador(cuidador)"
+    >
+      <i class="bx bxs-user-badge"></i>
+      <span class="option-namePaciente"
+        >{{ cuidador.nombreCuidador }} {{ cuidador.apPatCuidador }}
+        {{ cuidador.apMatCuidador }}</span
+      >
+    </li>
+  </ul>
+</div>
+
+<!----------------suplencias-------------------->
+<div class="suplencias">
+  <div class="select-btn2">
+    <span class="sBtn-text">{{
+      "Total de suplencias:  " + searchTextTotalSuplencias
+    }}</span>
+  </div>
+</div>
+
+<!----------------Select paciente-------------------->
+<div class="select-paciente" (click)="toggleSelect2()">
+  <div class="select-btn">
+    <span class="sBtn-text">{{
+      searchTextPacientes || "Seleccionar paciente"
+    }}</span>
+    <i
+      class="bx"
+      [class.bx-chevron-down]="!selectAbierto2"
+      [class.bx-chevron-up]="selectAbierto2"
+    ></i>
+  </div>
+  <ul class="options" *ngIf="selectAbierto2">
+    <li
+      class="option"
+      *ngFor="let paciente of filteredPacientes"
+      (click)="seleccionarPaciente(paciente)"
+    >
+      <i class="bx bxs-user-badge"></i>
+      <span class="option-namePaciente"
+        >{{ paciente.nombre_paciente }} {{ paciente.apellido_paterno }}
+        {{ paciente.apellido_materno }}</span
+      >
+    </li>
+  </ul>
+</div>
+
+<button class="btnBuscarSuplencia" (click)="buscarSuplencias()">
+  Buscar Suplencias
+</button>
+
+<div class="calendar-container">
+  <full-calendar
+    [options]="options"
+    [events]="events"
+    class="custom-calendar"
+  ></full-calendar>
+</div>
+
+
+
+
+
+calendario-servicios.component.ts
+import { Component, OnInit } from '@angular/core';
+import esLocale from '@fullcalendar/core/locales/es';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import { PacientesService } from '../../services/pacientes.service';
+import { Suplencia } from '../../models/suplencias';
+import { MatDialog } from '@angular/material/dialog';
+import { NuevaSuplenciaDialogComponent } from '../nueva-suplencia-dialog/nueva-suplencia-dialog.component';
+import { CuidadoresServiceService } from '../../services/cuidadores-service.service';
+import { Cuidador } from '../../models/cuidadores';
+import { Paciente } from '../../models/pacientes';
+import { SuplenciasServiceService } from '../../services/suplencias-service.service';
+
+@Component({
+  selector: 'app-calendario-servicios',
+  templateUrl: './calendario-servicios.component.html',
+  styleUrls: ['./calendario-servicios.component.scss'],
+})
+export class CalendarioServiciosComponent implements OnInit {
+  public events: any[] = [];
+  public options: any;
+  public selectedCuidador: Cuidador | null = null;
+  public selectAbierto: boolean = false;
+  public selectAbierto2: boolean = false;
+  public suplencias: Suplencia[] = [];
+  public searchTextCuidadores: string = '';
+  public searchTextPacientes: string = '';
+  public searchTextTotalSuplencias: string = '';
+  public cuidadores: Cuidador[] = [];
+  public pacientes: Paciente[] = [];
+  public filteredPacientes: Paciente[] = [];
+
+  constructor(
+    public pacientesService: PacientesService,
+    public dialog: MatDialog,
+    public cuidadoresService: CuidadoresServiceService,
+    private suplenciasService: SuplenciasServiceService
+  ) {
+    this.events = [];
+    this.options = {
+      plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+      initialView: 'dayGridMonth',
+      locale: esLocale,
+      headerToolbar: {
+        left: 'prev,next',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay',
+      },
+    };
+  }
+
+  ngOnInit() {
+    this.cuidadoresService.getCuidadores().subscribe(
+      (cuidadores) => {
+        this.cuidadores = cuidadores;
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+  
+    this.pacientesService.getPacientes().subscribe(
+      (pacientes) => {
+        this.pacientes = pacientes;
+        this.filteredPacientes = this.pacientes;
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+  }
+
+  seleccionarCuidador(cuidador: Cuidador) {
+    this.selectedCuidador = cuidador;
+    this.searchTextCuidadores = `${cuidador.nombreCuidador} ${cuidador.apPatCuidador} ${cuidador.apMatCuidador}`;
+    this.searchTextTotalSuplencias = cuidador.num_suplencias.toString();
+    this.filteredPacientes = this.pacientes.filter(paciente => paciente.id_cuidador_paciente === cuidador.id_cuidador_paciente);
+  }
+
+  seleccionarPaciente(paciente: Paciente) {
+    this.searchTextPacientes = `${paciente.nombre_paciente} ${paciente.apellido_paterno} ${paciente.apellido_materno}`;
+  }
+
+  agregarSuplencia(): void {
+    const dialogRef = this.dialog.open(NuevaSuplenciaDialogComponent, {
+      width: '850px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.agregarEvento(result);
+      }
+    });
+  }
+
+  toggleSelect() {
+    this.selectAbierto = !this.selectAbierto;
+  }
+  
+  toggleSelect2() {
+    this.selectAbierto2 = !this.selectAbierto2;
+  }
+
+  buscarSuplencias(id_cuidador_paciente: number, id_paciente: number) {
+
+}
+  
+  
+  agregarEvento(suplencia: any): void {
+    const nuevoEvento = {
+      title: `Suplencia de ${suplencia.cuidador}`,
+      start: `${suplencia.dia_suplencia}T${suplencia.hora_inicial}`,
+      end: `${suplencia.dia_suplencia}T${suplencia.hora_final}`,
+      description: `Costo: ${suplencia.costoGuardia}, Particular: ${suplencia.particular}`,
+    };
+
+    this.events = [...this.events, nuevoEvento];
+  }
+}
+
+
+
+
+
+-----------------------------------------------------------------------------
+ERROR: 
+   E:  ...  frontend  main  ~7  09:37  0s   -1073741510  ng serve -o
+Application bundle generation failed. [4.171 seconds]
+
+X [ERROR] NG4: Expected 2 arguments, but got 0. [plugin angular-compiler]
+
+    src/app/components/calendario-servicios/calendario-servicios.component.html:68:44:
+      68 │ <button class="btnBuscarSuplencia" (click)="buscarSuplencias()">
+         ╵                                             ~~~~~~~~~~~~~~~~
+
+  Error occurs in the template of component CalendarioServiciosComponent.
+
+    src/app/components/calendario-servicios/calendario-servicios.component.ts:17:15:
+      17 │   templateUrl: './calendario-servicios.component.html',
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+import { Component, OnInit } from '@angular/core';
+import esLocale from '@fullcalendar/core/locales/es';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import { PacientesService } from '../../services/pacientes.service';
+import { Suplencia } from '../../models/suplencias';
+import { MatDialog } from '@angular/material/dialog';
+import { NuevaSuplenciaDialogComponent } from '../nueva-suplencia-dialog/nueva-suplencia-dialog.component';
+import { CuidadoresServiceService } from '../../services/cuidadores-service.service';
+import { Cuidador } from '../../models/cuidadores';
+import { Paciente } from '../../models/pacientes';
+import { SuplenciasServiceService } from '../../services/suplencias-service.service';
+
+@Component({
+  selector: 'app-calendario-servicios',
+  templateUrl: './calendario-servicios.component.html',
+  styleUrls: ['./calendario-servicios.component.scss'],
+})
+export class CalendarioServiciosComponent implements OnInit {
+  public events: any[] = [];
+  public options: any;
+  public selectedCuidador: Cuidador | null = null;
+  public selectAbierto: boolean = false;
+  public selectAbierto2: boolean = false;
+  public suplencias: Suplencia[] = [];
+  public searchTextCuidadores: string = '';
+  public searchTextPacientes: string = '';
+  public searchTextTotalSuplencias: string = '';
+  public cuidadores: Cuidador[] = [];
+  public pacientes: Paciente[] = [];
+  public filteredPacientes: Paciente[] = [];
+
+  constructor(
+    public pacientesService: PacientesService,
+    public dialog: MatDialog,
+    public cuidadoresService: CuidadoresServiceService,
+    private suplenciasService: SuplenciasServiceService
+  ) {
+    this.events = [];
+    this.options = {
+      plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+      initialView: 'dayGridMonth',
+      locale: esLocale,
+      headerToolbar: {
+        left: 'prev,next',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay',
+      },
+    };
+  }
+
+  ngOnInit() {
+    this.cuidadoresService.getCuidadores().subscribe(
+      (cuidadores) => {
+        this.cuidadores = cuidadores;
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+  
+    this.pacientesService.getPacientes().subscribe(
+      (pacientes) => {
+        this.pacientes = pacientes;
+        this.filteredPacientes = this.pacientes;
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+  }
+
+  seleccionarCuidador(cuidador: Cuidador) {
+    this.selectedCuidador = cuidador;
+    this.searchTextCuidadores = `${cuidador.nombreCuidador} ${cuidador.apPatCuidador} ${cuidador.apMatCuidador}`;
+    this.searchTextTotalSuplencias = cuidador.num_suplencias.toString();
+    this.filteredPacientes = this.pacientes.filter(paciente => paciente.id_cuidador_paciente === cuidador.id_cuidador_paciente);
+  }
+
+  seleccionarPaciente(paciente: Paciente) {
+    this.searchTextPacientes = `${paciente.nombre_paciente} ${paciente.apellido_paterno} ${paciente.apellido_materno}`;
+  }
+
+  agregarSuplencia(): void {
+    const dialogRef = this.dialog.open(NuevaSuplenciaDialogComponent, {
+      width: '850px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.agregarEvento(result);
+      }
+    });
+  }
+
+  toggleSelect() {
+    this.selectAbierto = !this.selectAbierto;
+  }
+  
+  toggleSelect2() {
+    this.selectAbierto2 = !this.selectAbierto2;
+  }
+
+  buscarSuplencias(id_cuidador_paciente: number, id_paciente: number) {
+
+}
+  
+  
+  agregarEvento(suplencia: any): void {
+    const nuevoEvento = {
+      title: `Suplencia de ${suplencia.cuidador}`,
+      start: `${suplencia.dia_suplencia}T${suplencia.hora_inicial}`,
+      end: `${suplencia.dia_suplencia}T${suplencia.hora_final}`,
+      description: `Costo: ${suplencia.costoGuardia}, Particular: ${suplencia.particular}`,
+    };
+
+    this.events = [...this.events, nuevoEvento];
+  }
+}
+
+
+id_cuidador_paciente: number, id_paciente: number QUIERO QUE SEAN LOS QUE SE SELECCIONAN AQUI EN EL HTML:
+      (click)="seleccionarPaciente(paciente)"
+      (click)="seleccionarCuidador(cuidador)"
+
+SERVICIO DE SUPLENCIAS:
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http'; // metodos http
+import { Suplencia } from '../models/suplencias';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class SuplenciasServiceService {
+  URL_API = 'http://localhost:4000/api/ccuidarte-app/suplencias';
+  suplencia: Suplencia[] = [];
+
+  selectedSuplencia: Suplencia = {
+    dia_suplencia: '',
+    hora_inicial: '',
+    hora_final: '',
+    costoGuardia: 0,
+    particular: '',
+  };
+
+  constructor(private http: HttpClient) {}
+  
+
+  addSuplencia(suplencia: Suplencia): Observable<Suplencia> {
+    return this.http.post<Suplencia>('/api/suplencias', suplencia);
+  }
+
+  getSuplenciasByCuidadorAndPaciente(id_cuidador_paciente: number, id_paciente: number): Observable<Suplencia[]> {
+    return this.http.get<Suplencia[]>(`/api/suplencias?cuidador=${id_cuidador_paciente}&paciente=${id_paciente}`);
+  }
+  
+  
+}
+
+
+
+
+INTERFACES
+export interface Suplencia {
+  id_suplencia?: number;
+  dia_suplencia: string;
+  hora_inicial: string;
+  hora_final: string;
+  costoGuardia: number;
+  particular: string;
+  id_cuidador_paciente?: number;
+  id_paciente?: number;
+}
+
+
+export interface Paciente{ // descripcion del objeto empleado, proveniente de los atributos de la tabla empleados
+    id_paciente?: number,    //atributo es opcional.
+    expediente_paciente: string,
+    nombre_paciente: string,
+    apellido_paterno: string,  
+    apellido_materno: string,
+    sexo_paciente: string,
+    edad_paciente: number,
+    ingreso_programa?: string,
+    ultima_modificacion? : string,
+    nacionalidad: string,
+    domicilio: string,
+    colonia: string,
+    alcaldia_municipio: string,
+    entidadFederativa: string,
+    diagnostico: string,
+    parentesco_con_cuidador: string, //nueva columna
+    tipoPrograma: string,
+    recomendaciones?: string,
+    observaciones?: string,
+    suplencias?: number
+    id_cuidador_paciente?: number; // Nuevo campo para el id del cuidador
+}
+
+
+
+export interface Cuidador {
+  id_cuidador_paciente?: number;
+  nombreCuidador: string;
+  apPatCuidador: string;
+  apMatCuidador: string;
+  sexoCuidador: string;
+  edadCuidador: number;
+  telefonoCuidador: string;
+  num_suplencias: number; // Campo para el total de suplencias
+  ultima_modificacion: string;
+  ingreso_programa: string;
+}
+
+
+
+
+DEMAS SERVICIOS:
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http'; // metodos http
+import { Cuidador } from '../models/cuidadores'
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CuidadoresServiceService {
+  URL_API = 'http://localhost:4000/api/ccuidarte-app/cuidadores';
+  cuidador: Cuidador[] = [];
+
+  selectedCuidador: Cuidador = {
+    // todos los datos del cuidador
+    nombreCuidador: '',
+    apPatCuidador: '',
+    apMatCuidador: '',
+    sexoCuidador: '',
+    edadCuidador: 0,
+    telefonoCuidador: '',
+    num_suplencias: 0,
+    ultima_modificacion: '',
+    ingreso_programa: '',
+  }
+
+  constructor(private http: HttpClient) { }
+
+  getCuidadores() {
+    return this.http.get<Cuidador[]>(this.URL_API);
+  }  
+
+  searchAllCuidadores(textoBusqueda: string): Observable<Cuidador[]> {
+    return this.http.get<Cuidador[]>(
+      `${this.URL_API}/search?buscarAlcuidador=${textoBusqueda}`
+    );
+  }
+
+  getTotalSuplencias(idCuidador: number): Observable<number> {
+    return this.http.get<number>(`${this.URL_API}/total-suplencias/${idCuidador}`);
+  }
+
+  getCuidadorById(id: number): Observable<Cuidador> {
+    return this.http.get<Cuidador>(`${this.URL_API}/${id}`);
+  }
+
+  addCuidador(cuidador: Cuidador) {
+    return this.http.post(this.URL_API, cuidador);
+  }
+
+  updateCuidador(cuidador: Cuidador): Observable<any> {
+    return this.http.put(`${this.URL_API}/${cuidador.id_cuidador_paciente}`, cuidador); // url + los datos del paciente
+  }
+
+  deleteCuidador(id: number): Observable<any> {
+    return this.http.delete(`${this.URL_API}/${id}`);
+  }
+}
+
+
+
+
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Paciente } from '../models/pacientes';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class PacientesService {
+  URL_API = 'http://localhost:4000/api/ccuidarte-app/pacientes';
+  paciente: Paciente[] = [];
+
+  selectedPaciente: Paciente = {
+    // todos los datos del paciente
+    expediente_paciente: '',
+    nombre_paciente: '',
+    apellido_paterno: '',
+    apellido_materno: '',
+    sexo_paciente: '',
+    edad_paciente: 0,
+    nacionalidad: '',
+    domicilio: '',
+    colonia: '',
+    alcaldia_municipio: '',
+    entidadFederativa: '',
+    diagnostico: '',
+    parentesco_con_cuidador: '',
+    tipoPrograma: '',
+    ingreso_programa: '',
+    recomendaciones: '',
+    observaciones: '',
+    suplencias: 0,
+    id_cuidador_paciente: 0,
+  };
+
+  // constructor
+  constructor(private http: HttpClient) {}
+
+  // metodos del backend // traer los datos desde el backend = peticion HTTP
+  getPacientes() {
+    return this.http.get<Paciente[]>(this.URL_API);
+  }
+
+  searchAllPacientes(textoBusqueda: string): Observable<Paciente[]> {
+    return this.http.get<Paciente[]>(
+      `${this.URL_API}/search?buscarAlpaciente=${textoBusqueda}`
+    );
+  }
+
+  getPacienteByCuidador(idCuidador: number): Observable<Paciente> {
+    return this.http.get<Paciente>(`${this.URL_API}/cuidador/${idCuidador}`);
+  }
+
+  getPacienteById(id: number): Observable<Paciente> {
+    return this.http.get<Paciente>(`${this.URL_API}/${id}`);
+  }
+
+  // Método para verificar si un expediente ya está en uso
+  checkExpedienteInUse(expediente: string): Observable<boolean> {
+    return this.getExpedientes().pipe(
+      map((expedientes: string[]) => expedientes.includes(expediente))
+    );
+  }
+
+  getExpedientes(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.URL_API}/expedientes`);
+  }
+
+  addPaciente(paciente: Paciente) {
+    return this.http.post(this.URL_API, paciente);
+  }
+
+  deletePaciente(id: number): Observable<any> {
+    return this.http.delete(`${this.URL_API}/${id}`);
+  }
+
+  updatePaciente(paciente: Paciente): Observable<any> {
+    return this.http.put(`${this.URL_API}/${paciente.id_paciente}`, paciente); // url + los datos del paciente
+  }
+}
+
+
+
+
+pacientes.routes.js
+// importaciones
+const { Router } = require('express');  // enrutador
+const pacientesCtrls = require('../controllers/pacientes.controller');
+
+// envioroment variables
+
+// ---new objet
+const router = Router()
+
+
+
+// routes pacientes CRUD
+router.get('/pacientes', pacientesCtrls.getPacientes)  // reporte todos los pacientes
+router.get('/pacientes/search', pacientesCtrls.searchPacienteAutoComplete); // busqueda por nombre, apellidos
+router.get('/pacientes/:id', pacientesCtrls.getPacienteById); // busqueda por su id
+router.post('/pacientes', pacientesCtrls.addPaciente) // alta paciente
+router.put('/pacientes/:id', pacientesCtrls.updatePaciente) // actulizar paciente
+router.delete('/pacientes/:id', pacientesCtrls.deletePaciente) // bajas paciente
+router.get('/pacientes/expedientes', pacientesCtrls.getExpedientes);
+router.get('/pacientes/cuidador/:id', pacientesCtrls.getPacienteByCuidador);
+
+
+
+//suplencias
+router.post('/suplencias', pacientesCtrls.addSuplencia) //alta suplencia
+router.get('/suplencias', pacientesCtrls.getSuplencias) //todas las suplencias
+router.get('/suplencias/buscar', pacientesCtrls.buscarSuplenciasPorCuidadorYPaciente); // Ruta para buscar suplencias por cuidador y paciente
+
+//cuidadores
+router.get('/cuidadores', pacientesCtrls.getCuidadores)  // reporte todos los cuidadores
+router.get('/cuidadores/search', pacientesCtrls.searchCuidadorAutoComplete); // busqueda por nombre, apellidos
+router.get('/cuidadores/:id', pacientesCtrls.getCuidadorById); // busqueda por su id
+router.post('/cuidadores', pacientesCtrls.addCuidador) // alta cuidador
+router.put('/cuidadores/:id', pacientesCtrls.updateCuidador) // actulizar cuidador
+router.get('/cuidadores/total-suplencias/:id', pacientesCtrls.getTotalSuplenciasPorCuidador);
+
+// router.delete('/cuidadores/:id', pacientesCtrls.deletePaciente) // bajas paciente
+
+// export
+module.exports = router
+
+
+
+
+
+
+
+pacientes.controller.js
+// ----------------SUPLENCIAS----------------
+
+pacientesCtrls.getSuplencias = async (req, res) => {
+    const [rows] = await pool.promise().query("SELECT * FROM suplencias");
+    res.json(rows);
+};
+
+
+pacientesCtrls.addSuplencia = async (req, res) => {
+    const {
+        id_cuidador_paciente, // Asegúrate de recibir el ID del cuidador desde el frontend
+        dia_suplencia,
+        hora_inicial,
+        hora_final,
+        costoGuardia,
+        particular,
+    } = req.body;
+
+    try {
+        console.log("Datos recibidos para la nueva suplencia:", req.body);
+
+        // Verifica que el cuidador existe
+        const [cuidador] = await pool.promise().query(
+            "SELECT * FROM cuidadores WHERE id_cuidador_paciente = ?",
+            [id_cuidador_paciente]
+        );
+
+        if (cuidador.length > 0) {
+            console.log("Cuidador encontrado:", cuidador[0]);
+
+            // Insertar la suplencia
+            const [rows] = await pool.promise().query(
+                "INSERT INTO suplencias (id_cuidador_paciente, dia_suplencia, hora_inicial, hora_final, costoGuardia, particular) VALUES (?, ?, ?, ?, ?, ?)",
+                [
+                    id_cuidador_paciente,
+                    dia_suplencia,
+                    hora_inicial,
+                    hora_final,
+                    costoGuardia,
+                    particular,
+                ]
+            );
+
+            console.log("Suplencia insertada:", rows);
+
+            // Actualizar el número de suplencias del cuidador
+            const [updateResult] = await pool.promise().query(
+                "UPDATE cuidadores SET num_suplencias = num_suplencias + 1 WHERE id_cuidador_paciente = ?",
+                [id_cuidador_paciente]
+            );
+
+            console.log("Número de suplencias actualizado:", updateResult);
+
+            res.send({
+                id_cuidador_paciente,
+                dia_suplencia,
+                hora_inicial,
+                hora_final,
+                costoGuardia,
+                particular,
+            });
+        } else {
+            res.status(404).send("Cuidador no encontrado");
+        }
+    } catch (error) {
+        console.error("Error al agregar la suplencia:", error);
+        res.status(500).send("Error al agregar la suplencia");
+    }
+};
+
+
+// Ruta en backend para buscar suplencias por cuidador y paciente
+pacientesCtrls.buscarSuplenciasPorCuidadorYPaciente = async (req, res) => {
+    const { cuidador, paciente } = req.query;
+    const [rows] = await pool.promise().query("SELECT * FROM suplencias WHERE id_cuidador_paciente = ? AND id_paciente = ?", [cuidador, paciente]);
+    res.json(rows);
+};
+
+
+
