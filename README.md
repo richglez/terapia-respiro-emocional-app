@@ -93,4 +93,16 @@ MySQL schema and initial scripts.
 
 
 ## Overview:
+** Dashboard
 ![Dashboard](docs/images/TREdashboard.png)
+
+** Form add patient
+![CreatePatient](docs/images/TREcreatePatient.png)
+
+** List of Patients
+![ListPatients](docs/images/TREpatientList.png)
+
+** Calendar new Substitute
+![CalendarSubstitute](docs/images/TREsubstitute.png)
+
+

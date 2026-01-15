@@ -1,0 +1,3 @@
+PUNTOS PENDIENTES DE LA APP
+Falta poner The Full Name field is required en un campo vacio del formulario
+
