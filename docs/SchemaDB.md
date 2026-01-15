@@ -140,3 +140,67 @@ erDiagram
         INT id_paciente FK
     }
 ```
+
+
+```
+┌──────────────────────────┐
+│ CUIDADORES │
+├──────────────────────────┤
+│ id_cuidador_paciente (PK)│
+│ nombreCuidador │
+│ apPatCuidador │
+│ apMatCuidador │
+│ sexoCuidador │
+│ edadCuidador │
+│ telefonoCuidador │
+│ ingreso_programa │
+│ ultima_modificacion │
+│ num_suplencias │
+└─────────────┬────────────┘
+│ 1
+│
+▼
+┌──────────────────────────┐
+│ PACIENTES │
+├──────────────────────────┤
+│ id_paciente (PK) │
+│ expediente_paciente │
+│ nombre_paciente │
+│ apellido_paterno │
+│ apellido_materno │
+│ sexo_paciente │
+│ edad_paciente │
+│ ingreso_programa │
+│ ultima_modificacion │
+│ nacionalidad │
+│ domicilio │
+│ colonia │
+│ alcaldia_municipio │
+│ entidadFederativa │
+│ diagnostico │
+│ parentesco_con_cuidador │
+│ tipoPrograma │
+│ observaciones │
+│ recomendaciones │
+│ id_cuidador_paciente (FK)│
+└─────────────┬────────────┘
+│ 1
+│
+▼
+┌──────────────────────────┐
+│ SUPLENCIAS │
+├──────────────────────────┤
+│ id_suplencia (PK) │
+│ dia_suplencia │
+│ hora_inicial │
+│ hora_final │
+│ costoGuardia │
+│ particular │
+│ concurrencia_anual │
+│ id_cuidador_paciente (FK)│◄───────────────┐
+│ id_paciente (FK) │ │
+└──────────────────────────┘ │
+│ 1
+│
+└─────────── CUIDADORES
+```
