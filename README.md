@@ -32,7 +32,18 @@ The user can:
 - Manage patient records in an organized and efficient way
 
 
-## Directory Structure
+## 📂 Project Structure
+
+### Backend
+Contains the REST API built with Node.js and Express.
+
+### Frontend
+Angular application that consumes the REST API.
+
+### Database
+MySQL schema and initial scripts.
+
+
 📦 terapia-respiro-emocional
 ├── 📁 backend
 │   ├── 📁 controllers
