@@ -33,34 +33,29 @@ The user can:
 
 
 ## Directory Structure
-terapia-respiro-emocional-app/
-├───backend
-│   ├───node_modules
-│   └───src
-│       ├───controllers
-│       ├───database
-│       └───routes
-└───frontend
-    ├───.vscode
-    └───src
-        ├───app
-        │   ├───components
-        │   │   ├───actualizar-dialog
-        │   │   ├───actulizar2-dialog
-        │   │   ├───base-datos
-        │   │   ├───body
-        │   │   ├───calendario-servicios
-        │   │   ├───confirmar-eliminar-dialog
-        │   │   ├───confirmar-eliminar2-dialog
-        │   │   ├───dashboard
-        │   │   ├───exit
-        │   │   ├───expediente-electronico
-        │   │   ├───new-cuidador
-        │   │   ├───new-paciente
-        │   │   ├───nueva-suplencia-dialog
-        │   │   ├───search-cuidador
-        │   │   ├───search-paciente
-        │   │   └───sidenav
-        │   ├───models
-        │   └───services
-        └───assets
+📦 terapia-respiro-emocional
+├── 📁 backend
+│   ├── 📁 controllers
+│   ├── 📁 routes
+│   ├── 📁 models
+│   ├── 📁 config
+│   ├── app.js
+│   └── package.json
+│
+├── 📁 frontend
+│   ├── 📁 src
+│   │   ├── 📁 app
+│   │   │   ├── 📁 components
+│   │   │   ├── 📁 services
+│   │   │   ├── 📁 pages
+│   │   │   └── app.module.ts
+│   │   └── environments
+│   ├── angular.json
+│   └── package.json
+│
+├── 📁 database
+│   └── schema.sql
+│
+├── README.md
+└── .gitignore
+
