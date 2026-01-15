@@ -86,3 +86,7 @@ MySQL schema and initial scripts.
 | npm run dev   | Start development server |
 | npm init  | Initialize the project within the editor |
 
+
+## Documentation
+
+-  Product Requirements Document
