@@ -2,10 +2,10 @@
 
 ## Main Features
 - Main Screen
-- Objetivo: El objetivo de esta pantalla (dashboard-panel de control) es ver datos estadisticos de acuerdo a los datos en la base de datos. Donde se podran ver:
-  - Todos los pacientes registrados en la base de datos
-  - Todos los cuidadores registrados en la base de datos
-  - Total de pacientes menores de edad en la base de datos
-  - Total de pacientes mayores de edad en la base de datos
-  - Total de suplencias registradas en la base de datos
-  - Vista previa a las proximas suplencias agendadas
+- Purpose: The purpose of this screen (dashboard) is to view statistical data based on the data in the database. You will be able to see:
+  - All patients registered in the database
+  - All caregivers registered in the database
+  - Total number of patients under 18 years of age in the database
+  - Total number of patients over 18 years of age in the database
+  - Total number of substitute caregivers registered in the database
+  - Preview of upcoming scheduled substitute caregivers
