@@ -89,4 +89,4 @@ MySQL schema and initial scripts.
 
 ## Documentation
 
-- "https://github.com/richglez/terapia-respiro-emocional-app/tree/main/docs/PRD.md"  Product Requirements Document
+- [PRD](https://github.com/richglez/terapia-respiro-emocional-app/tree/main/docs/PRD.md)  Product Requirements Document
