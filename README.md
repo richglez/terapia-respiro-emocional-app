@@ -66,7 +66,14 @@ MySQL schema and initial scripts.
 │
 ├── 📁 database
 │   └── schema.sql
-│
-├── README.md
-└── .gitignore
+
+
+
+```
+## 🛠 Scripts 
+
+| Script | Description  |
+|-----------|-------------|
+| npm run dev   | Start development server |
+| npm init  | Initialize the project within the editor |
 
