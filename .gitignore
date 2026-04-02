@@ -48,3 +48,20 @@ Thumbs.db
 .env.local
 .env.production
 .env.development
+
+
+# Logs adicionales
+logs/
+*.log
+pnpm-debug.log*
+
+# Testing
+.nyc_output
+
+# Cache de herramientas
+.eslintcache
+.stylelintcache
+
+# OS adicional
+desktop.ini
+ehthumbs.db
